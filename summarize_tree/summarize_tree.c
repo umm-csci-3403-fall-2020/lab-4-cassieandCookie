@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 
+//variables visible to functions in this file
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
