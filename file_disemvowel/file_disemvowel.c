@@ -4,33 +4,46 @@
 #define BUF_SIZE 1024
 
 bool is_vowel(char c){
-
   if(c == 'a' || c == 'e' || c == 'i' || c== 'o' || c== 'u'|| c == 'A' || c == 'E' || c == 'I' || c== 'O' || c== 'U' ){
 	  return true;
   }
   return false;
-// Returns true if c is a vowel
-return true;
 }
 
-int copy_non_vowel(char c){
-
-
-// copy all thenon-vowels from 
-// in_buf to out_buf.
-// num_chars indicatees how many chars in in_buf
-// //This functino should return the number of non vowels
-// that were coppied over
-return 1;
+int copy_non_vowel(int num_char, char* in_buff, char* out_buff){
+int index =0;
+  for(int i = 0; i< num_char; i++){
+     if( is_vowel(in_buff[i]) == false ){
+	out_buff[index] = in_buff[i];
+	index++;
+     }   
+  }  
+return index;
 }
 
 void disemvowel(FILE* inputFile, FILE* outputFile){
-	 /*        * Copy all the non-vowels from inputFile to outputFile.
-	  *      * Create input and output buffers, and use fread() to repeatedly read
-	  *           * in a buffer of data, copy the non-vowels to the output buffer, and
-	  *      * use fwrite to write that out.
-	  *                     */
+  fp = fopen(inputFile, "r");
 
+  char* in_buff = (char*)calloc(BUFF_SIZE, sizeof(char));
+  char* out_buff = (char*)calloc(BUFF_SIZE, sizeof(char));
+  
+
+  while(true){ 
+    num_chars = (int)fread(in_buff, sizeof(char), BUFF_SIZE, inputFile);
+    if(num_chars<0){
+      break;
+    }    
+    int non-vowels = copy_non_vowels(num_chars, in_buff
+
+
+  }
+
+
+  if(fp == NULL){
+    printf("Error opening file\n");
+	exit(1);    
+  }
+  while(fread(&inputFile, sizeof(char),
 
 
 }
@@ -45,6 +58,7 @@ FILE *outputFile = stdout;
 if(argc>2){
 printf("Too many arguements supplied. \n");
 }
+printf("%d", copy_non_vowel(6,inputFile, outputFile));
 
 
 
