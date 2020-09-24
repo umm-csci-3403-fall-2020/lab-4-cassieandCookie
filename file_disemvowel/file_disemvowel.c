@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <stdlib.h>
 #define BUF_SIZE 1024
 
 bool is_vowel(char c){
@@ -22,30 +22,27 @@ return index;
 }
 
 void disemvowel(FILE* inputFile, FILE* outputFile){
-  fp = fopen(inputFile, "r");
-
-  char* in_buff = (char*)calloc(BUFF_SIZE, sizeof(char));
-  char* out_buff = (char*)calloc(BUFF_SIZE, sizeof(char));
+ 
+  char* in_buff = (char*)calloc(BUF_SIZE, sizeof(char));
+  char* out_buff = (char*)calloc(BUF_SIZE, sizeof(char));
   
+    while(true){
 
-  while(true){ 
-    num_chars = (int)fread(in_buff, sizeof(char), BUFF_SIZE, inputFile);
-    if(num_chars<0){
+  
+    int num_chars = 0; 
+    num_chars = (int)fread(in_buff, sizeof(char), BUF_SIZE, inputFile);
+    if(num_chars == 0){
       break;
     }    
-    int non-vowels = copy_non_vowels(num_chars, in_buff
-
-
-  }
-
-
-  if(fp == NULL){
-    printf("Error opening file\n");
-	exit(1);    
-  }
-  while(fread(&inputFile, sizeof(char),
-
-
+    int non_vowels = copy_non_vowel(num_chars, in_buff, out_buff);
+    fwrite(out_buff, sizeof(char), non_vowels, outputFile);
+  
+  //free(in_buff);
+  //free(out_buff);
+    }
+  fclose(inputFile);
+  fclose(outputFile);
+  
 }
 
 int main(int argc, char *argv[]) {
@@ -55,14 +52,8 @@ int main(int argc, char *argv[]) {
 //FILE *inputFile = fopen(argv[1], "r");
 FILE *inputFile = stdin;
 FILE *outputFile = stdout;
-if(argc>2){
-printf("Too many arguements supplied. \n");
-}
-printf("%d", copy_non_vowel(6,inputFile, outputFile));
 
-
-
-//disemvowel(inputFile, outputFile);
+disemvowel(inputFile, outputFile);
 return 0;
 
 }
