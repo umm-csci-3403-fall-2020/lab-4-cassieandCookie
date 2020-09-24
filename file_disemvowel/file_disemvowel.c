@@ -50,8 +50,26 @@ int main(int argc, char *argv[]) {
 //by default, and then set them to the user specified files when the 
 //user provides file names as command line argumentst
 //FILE *inputFile = fopen(argv[1], "r");
-FILE *inputFile = stdin;
-FILE *outputFile = stdout;
+FILE *inputFile; 
+FILE *outputFile;
+// argv[0] is the name of the program
+if(argc == 1){
+  inputFile = stdin;
+  outputFile = stdout; 
+}
+else if( argc == 2 ){
+  inputFile = fopen(argv[1], "r");
+  outputFile = stdout;
+}
+else if(argc == 3){
+  inputFile = fopen(argv[1], "r"); 	
+  outputFile = fopen(argv[2], "w");
+}
+// exit if too many command line arguments are given
+else{
+ printf("too many arguements.  I dead");
+  exit(0);
+}
 
 disemvowel(inputFile, outputFile);
 return 0;
