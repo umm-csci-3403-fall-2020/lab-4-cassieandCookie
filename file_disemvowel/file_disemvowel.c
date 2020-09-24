@@ -12,7 +12,7 @@ bool is_vowel(char c){
 
 int copy_non_vowel(int num_char, char* in_buff, char* out_buff){
 int index =0;
-  for(int i = 0; i< num_char; i++){
+  for(int i = 0; i< num_char-1; i++){
      if( is_vowel(in_buff[i]) == false ){
 	out_buff[index] = in_buff[i];
 	index++;
@@ -37,9 +37,11 @@ void disemvowel(FILE* inputFile, FILE* outputFile){
     int non_vowels = copy_non_vowel(num_chars, in_buff, out_buff);
     fwrite(out_buff, sizeof(char), non_vowels, outputFile);
   
-  //free(in_buff);
-  //free(out_buff);
+  
+  
     }
+  free(in_buff);
+  free(out_buff);
   fclose(inputFile);
   fclose(outputFile);
   
