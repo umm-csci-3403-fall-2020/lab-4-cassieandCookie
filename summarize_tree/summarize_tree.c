@@ -5,17 +5,25 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
+#define BUF_SIZE 1024
 
 //variables visible to functions in this file
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
+  char* in_buff = (char*)calloc(BUF_SIZE, sizeof(char));
+  int stat(const char *pathname, struct stat *in_buff);
+  if (stat == 0) {
+	return false;
+  }
+  
   /*
    * Use the stat() function (try "man 2 stat") to determine if the file
    * referenced by path is a directory or not.  Call stat, and then use
    * S_ISDIR to see if the file is a directory. Make sure you check the
    * return value from stat in case there is a problem, e.g., maybe the
    * the file doesn't actually exist.
+   *int stat(const char *pathname, struct stat *statbuf);
    */
 }
 

@@ -36,8 +36,18 @@ void disemvowel(FILE* inputFile, FILE* outputFile){
     }    
     int non_vowels = copy_non_vowel(num_chars, in_buff, out_buff);
     fwrite(out_buff, sizeof(char), non_vowels, outputFile);
-  
-  
+
+    //fwrite(1,2,3,4)
+    //1 = pointer to array of elements to be written
+    //2 = size of each element to be written
+    //3 = number of elements (size in bytes)
+    //4 = pointer to a FILE object specifying an output stream
+
+    //fread(1,2,3,4)
+    //1 = pointer to a block of memory
+    //2 = size of each element to be read
+    //3 = number of elements (size in bytes)
+    //4 = pointer to a FILE object specifying input stream
   
     }
   free(in_buff);
