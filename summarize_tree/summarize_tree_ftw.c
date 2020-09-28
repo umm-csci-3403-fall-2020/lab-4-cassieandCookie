@@ -20,7 +20,7 @@ int main(int argc, char** argv){
   //check arguements and set things up 
   if(argc != 2){
     printf("need two arguements");
-    return 1;
+    exit(1);
   }
   num_dirs = 0; 
   num_regular =0; 
