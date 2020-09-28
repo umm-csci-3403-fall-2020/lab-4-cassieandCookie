@@ -20,13 +20,13 @@ int main(int argc, char** argv){
   //check arguements and set things up 
   if(argc != 2){
     printf("need two arguements");
-    exit(0);
+    return 1;
   }
   num_dirs = 0; 
   num_regular =0; 
   ftw(argv[1], callback, MAX_FTW_DEPTH);
-  printf("number of dirs : %d" , num_dirs);
-  printf("number of files : %d", num_regular);
+  printf("There were %d directories.\n" , num_dirs);
+  printf("There were %d regular files.\n", num_regular);
 
   return 0;
 }
