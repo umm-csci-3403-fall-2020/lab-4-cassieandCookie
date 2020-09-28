@@ -11,11 +11,18 @@
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
-  char* in_buff = (char*)calloc(BUF_SIZE, sizeof(char));
-  int stat(const char *pathname, struct stat *in_buff);
-  if (stat == 0) {
+  struct stat in_buf;
+  int errorCode = stat(path,&in_buf );
+  if (errorCode == 0) {
+	int isDir; 
+	isDir = S_ISDIR(in_buf.st_mode);
+	// returns a non zero int if file is directory 
+	if(isDir != 0){
+		return true;
+	}
 	return false;
   }
+  return false; 
   
   /*
    * Use the stat() function (try "man 2 stat") to determine if the file
@@ -34,6 +41,20 @@ bool is_dir(const char* path) {
 void process_path(const char*);
 
 void process_directory(const char* path) {
+	// move to the correct directory
+	chdir(path);
+	struct dirent *dp; 	
+	DIR *dirp = opendir(".");
+	while(dirp){
+	   errno = 0; 
+	   if(( dp != NULL){
+		if(strcmp(dp->d_name,"." ) == 0 || strcmp(dp->d_name, ".." ) == 0){
+			break;
+		}
+ 	   }
+
+
+	}
   /*
    * Update the number of directories seen, use opendir() to open the
    * directory, and then use readdir() to loop through the entries
