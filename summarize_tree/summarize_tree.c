@@ -11,19 +11,23 @@
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
-  struct stat statBuff;
-  //char* in_buff = (char*)calloc(BUF_SIZE,sizeof(char));
+  struct stat *statBuff;
+  statBuff = malloc(sizeof(struct stat));
   //int stat(path, statBuff);
-  if (stat(path, &statBuff) !=0){
+  if (stat(path, statBuff) !=0){
+	// there was an error
 	return false;
   }
-  return S_ISDIR(statBuff.st_mode);
+  if(S_ISDIR(statBuff->st_mode)){
+    return true;
+  }
+  else{
+    return false;
+  }
+ 
 }
 
-/* 
- * I needed this because the multiple recursion means there's no way to
- * order them so that the definitions all precede the cause.
- */
+
 void process_path(const char*);
 
 void process_directory(const char* path) {
@@ -38,7 +42,7 @@ void process_directory(const char* path) {
   // add to number of dirs after passing error test
   num_dirs++; 
   // while directory stream has info
-  while(dp = readdir(dirp) != NULL){
+  while((dp = readdir(dirp)) != NULL){
       // check d_name to make sure dir is not curr or parent dir
       if(strcmp(dp->d_name,"." ) != 0 && strcmp(dp->d_name, ".." ) != 0){
 	  process_path(dp->d_name);
