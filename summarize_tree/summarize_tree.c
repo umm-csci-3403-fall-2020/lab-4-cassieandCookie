@@ -27,20 +27,30 @@ bool is_dir(const char* path) {
 void process_path(const char*);
 
 void process_directory(const char* path) {
-	// move to the correct directory
-	chdir(path);
-	struct dirent *dp; 	
-	DIR *dirp = opendir(".");
-	while(dirp){
-	   errno = 0; 
-	   if(( dp != NULL){
-		if(strcmp(dp->d_name,"." ) == 0 || strcmp(dp->d_name, ".." ) == 0){
-			break;
-		}
- 	   }
+  // move to the correct directory 
+  chdir(path);
+  struct dirent *dp; 	
+  DIR *dirp = opendir(".");
+  // to avoid errors
+  if(!dirp){
+    return;
+  }
+  // add to number of dirs after passing error test
+  num_dirs++; 
+  // while directory stream has info
+  dp = readdir(dirp); 
+  while(dp != NULL){
+	  // check d_name to make sure dir is not curr or parent dir
+      if(strcmp(dp->d_name,"." ) != 0 || strcmp(dp->d_name, ".." ) != 0){
+	  process_path(dp->d_name);
+      }
+  }
+  // close and return user
+  closedir(dirp);
+  chdir("..");
 
 
-	}
+}
   /*
    * Update the number of directories seen, use opendir() to open the
    * directory, and then use readdir() to loop through the entries
@@ -55,9 +65,8 @@ void process_directory(const char* path) {
 }
 
 void process_file(const char* path) {
-  /*
-   * Update the number of regular files.
-   */
+  // updatind number of regualar files
+  num_regualr++;
 }
 
 void process_path(const char* path) {
