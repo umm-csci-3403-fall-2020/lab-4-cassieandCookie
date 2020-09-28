@@ -38,10 +38,9 @@ void process_directory(const char* path) {
   // add to number of dirs after passing error test
   num_dirs++; 
   // while directory stream has info
-  dp = readdir(dirp); 
-  while(dp != NULL){
-	  // check d_name to make sure dir is not curr or parent dir
-      if(strcmp(dp->d_name,"." ) != 0 || strcmp(dp->d_name, ".." ) != 0){
+  while(dp = readdir(dirp) != NULL){
+      // check d_name to make sure dir is not curr or parent dir
+      if(strcmp(dp->d_name,"." ) != 0 && strcmp(dp->d_name, ".." ) != 0){
 	  process_path(dp->d_name);
       }
   }
@@ -49,24 +48,11 @@ void process_directory(const char* path) {
   closedir(dirp);
   chdir("..");
 
-
-}
-  /*
-   * Update the number of directories seen, use opendir() to open the
-   * directory, and then use readdir() to loop through the entries
-   * and process them. You have to be careful not to process the
-   * "." and ".." directory entries, or you'll end up spinning in
-   * (infinite) loops. Also make sure you closedir() when you're done.
-   *
-   * You'll also want to use chdir() to move into this new directory,
-   * with a matching call to chdir() to move back out of it when you're
-   * done.
-   */
 }
 
 void process_file(const char* path) {
-  // updatind number of regualar files
-  num_regualr++;
+  // updating number of regualar files
+  num_regular++;
 }
 
 void process_path(const char* path) {
