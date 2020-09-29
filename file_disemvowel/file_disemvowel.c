@@ -30,12 +30,12 @@ void disemvowel(FILE* inputFile, FILE* outputFile){
 
   
     int num_chars = 0; 
-    num_chars = (int)fread(in_buff, sizeof(char), BUF_SIZE, inputFile);
+    num_chars = (int)fread(in_buff, sizeof(char), BUF_SIZE, inputFile); //returns the number of characters
     if(num_chars == 0){
       break;
     }    
     int non_vowels = copy_non_vowel(num_chars, in_buff, out_buff);
-    fwrite(out_buff, sizeof(char), non_vowels, outputFile);
+    fwrite(out_buff, sizeof(char), non_vowels, outputFile); //writes all the characters it read into the outputFile
 
     //fwrite(1,2,3,4)
     //1 = pointer to array of elements to be written

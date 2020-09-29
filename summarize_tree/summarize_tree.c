@@ -5,7 +5,6 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
-#define BUF_SIZE 1024
 
 //variables visible to functions in this file
 static int num_dirs, num_regular;
@@ -13,12 +12,11 @@ static int num_dirs, num_regular;
 bool is_dir(const char* path) {
   struct stat *statBuff;
   statBuff = malloc(sizeof(struct stat));
-  //int stat(path, statBuff);
-  if (stat(path, statBuff) !=0){
-	// there was an error
+  if (stat(path, statBuff) !=0){ //stat() returns an int
+	// there was an error, if the file doesn't actually exist
 	return false;
   }
-  if(S_ISDIR(statBuff->st_mode)){
+  if(S_ISDIR(statBuff->st_mode)){ //Determining if a something is a directory or not
     free(statBuff);
     return true;
   }
@@ -32,27 +30,27 @@ bool is_dir(const char* path) {
 
 void process_path(const char*);
 
-void process_directory(const char* path) {
+void process_directory(const char* path) { //checks the directory in a path, increments it and checks to see if more directories within that path need to be processed
   // move to the correct directory 
   chdir(path);
-  struct dirent *dp; 	
-  DIR *dirp = opendir(".");
-  // to avoid errors
+  struct dirent *dp; //dirent is another type of struct	
+  DIR *dirp = opendir("."); //opening the current directory that we're in
+  // to avoid errors, if directory is nonexistent
   if(!dirp){
     return;
   }
   // add to number of dirs after passing error test
   num_dirs++; 
   // while directory stream has info
-  while((dp = readdir(dirp)) != NULL){
+  while((dp = readdir(dirp)) != NULL){ //looking if there is anything left to read in the directory 
       // check d_name to make sure dir is not curr or parent dir
-      if(strcmp(dp->d_name,"." ) != 0 && strcmp(dp->d_name, ".." ) != 0){
+      if(strcmp(dp->d_name,"." ) != 0 && strcmp(dp->d_name, ".." ) != 0){ //returns 0 if they're the same, strcmp is similar to a compareTo method
 	  process_path(dp->d_name);
       }
   }
   // close and return user
   closedir(dirp);
-  chdir("..");
+  chdir(".."); //have to out of path you're looking at
 
 }
 
@@ -61,9 +59,9 @@ void process_file(const char* path) {
   num_regular++;
 }
 
-void process_path(const char* path) {
+void process_path(const char* path) { //checks to see if path is a file or a directory which determines whether or not it needs to be processed
   if (is_dir(path)) {
-    process_directory(path);
+    process_directory(path); //if the path is a directory, recurively opening it up and seeing if there are more files/directories inside
   } else {
     process_file(path);
   }
