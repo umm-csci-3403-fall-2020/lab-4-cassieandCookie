@@ -6,47 +6,62 @@
 #include <unistd.h>
 #include <string.h>
 
+//variables visible to functions in this file
 static int num_dirs, num_regular;
 
 bool is_dir(const char* path) {
-  /*
-   * Use the stat() function (try "man 2 stat") to determine if the file
-   * referenced by path is a directory or not.  Call stat, and then use
-   * S_ISDIR to see if the file is a directory. Make sure you check the
-   * return value from stat in case there is a problem, e.g., maybe the
-   * the file doesn't actually exist.
-   */
+  struct stat *statBuff;
+  statBuff = malloc(sizeof(struct stat));
+  if (stat(path, statBuff) !=0){ //stat() returns an int
+	// there was an error, if the file doesn't actually exist
+	return false;
+  }
+  if(S_ISDIR(statBuff->st_mode)){ //Determining if a something is a directory or not
+    free(statBuff);
+    return true;
+  }
+  else{
+    free(statBuff); 	  
+    return false;
+  }
+   
 }
 
-/* 
- * I needed this because the multiple recursion means there's no way to
- * order them so that the definitions all precede the cause.
- */
+
 void process_path(const char*);
 
-void process_directory(const char* path) {
-  /*
-   * Update the number of directories seen, use opendir() to open the
-   * directory, and then use readdir() to loop through the entries
-   * and process them. You have to be careful not to process the
-   * "." and ".." directory entries, or you'll end up spinning in
-   * (infinite) loops. Also make sure you closedir() when you're done.
-   *
-   * You'll also want to use chdir() to move into this new directory,
-   * with a matching call to chdir() to move back out of it when you're
-   * done.
-   */
+void process_directory(const char* path) { //checks the directory in a path, increments it and checks to see if more directories within that path need to be processed
+  // move to the correct directory 
+  chdir(path);
+  struct dirent *dp; //dirent is another type of struct	
+  DIR *dirp = opendir("."); //opening the current directory that we're in
+  // to avoid errors, if directory is nonexistent
+  if(!dirp){
+    return;
+  }
+  // add to number of dirs after passing error test
+  num_dirs++; 
+  // while directory stream has info
+  while((dp = readdir(dirp)) != NULL){ //looking if there is anything left to read in the directory 
+      // check d_name to make sure dir is not curr or parent dir
+      if(strcmp(dp->d_name,"." ) != 0 && strcmp(dp->d_name, ".." ) != 0){ //returns 0 if they're the same, strcmp is similar to a compareTo method
+	  process_path(dp->d_name);
+      }
+  }
+  // close and return user
+  closedir(dirp);
+  chdir(".."); //have to out of path you're looking at
+
 }
 
 void process_file(const char* path) {
-  /*
-   * Update the number of regular files.
-   */
+  // updating number of regualar files
+  num_regular++;
 }
 
-void process_path(const char* path) {
+void process_path(const char* path) { //checks to see if path is a file or a directory which determines whether or not it needs to be processed
   if (is_dir(path)) {
-    process_directory(path);
+    process_directory(path); //if the path is a directory, recurively opening it up and seeing if there are more files/directories inside
   } else {
     process_file(path);
   }
