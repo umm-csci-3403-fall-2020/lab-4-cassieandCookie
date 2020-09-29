@@ -19,12 +19,14 @@ bool is_dir(const char* path) {
 	return false;
   }
   if(S_ISDIR(statBuff->st_mode)){
+    free(statBuff);
     return true;
   }
   else{
+    free(statBuff); 	  
     return false;
   }
- 
+   
 }
 
 
